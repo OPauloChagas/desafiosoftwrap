@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
+import 'antd/dist/antd.css';
 import './App.css';
+import { Table } from 'antd';
+// import { EditOutlined } from '@ant-design/icons';
 import { db } from './firebase-config';
-import { collection, getDocs, addDoc, updateDoc, doc } from 'firebase/firestore';
+import { collection, getDocs, addDoc } from 'firebase/firestore';
 
 function App() {
 
@@ -14,6 +17,7 @@ function App() {
 
 
   const [users, setUsers] = useState([]);
+
   const collecaoUsuariosRef = collection(db, "DadosUsuario");
 
   const createUser = async () => {
@@ -27,13 +31,75 @@ function App() {
 
   // };
 
+  // const [dataSource, setDataSource] = useState([]);
+  // const fetchUsers = async () => {
+  //   const response = db.collection('DadosUsuario');
+  //   const data = await response.get();
+  //   data.docs.forEach(item => {
+  //     setDataSource([...dataSource, item.data()])
+  //   })   
+  // }
+
+  // useEffect(() => {
+  //   fetchUsers();
+  // }, [])
+
+
+
   useEffect(() => {
     const getUsers = async () => {
       const data = await getDocs(collecaoUsuariosRef);
       setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
+
     getUsers();
   }, [collecaoUsuariosRef]);
+
+
+  // const columns = [
+  //   {
+  //     key: '1',
+  //     title: 'Nome',
+  //     dataIndex: 'Nome'
+  //   },
+  //   {
+  //     key: '2',
+  //     title: 'Idade',
+  //     dataIndex: 'Idade'
+  //   },
+  //   {
+  //     key: '3',
+  //     title: 'Estado Civil',
+  //     dataIndex: 'EstadoCivil'
+  //   },
+  //   {
+  //     key: '4',
+  //     title: 'CPF',
+  //     dataIndex: 'CPF'
+  //   },
+  //   {
+  //     key: '5',
+  //     title: 'Cidade',
+  //     dataIndex: 'Cidade'
+  //   },
+  //   {
+  //     key: '6',
+  //     title: 'Estado',
+  //     dataIndex: 'Estado'
+  //   }
+  // ]
+
+  // return (
+  //   <div className="App">
+  //     <header className="App-header">
+  //       <Table
+  //         columns={columns}
+  //         dataSource={users}
+  //       ></Table>
+  //     </header>
+
+  //   </div>
+  // );
 
   return (
     <div className="App">
