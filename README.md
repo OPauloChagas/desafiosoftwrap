@@ -4,7 +4,7 @@
 
 ## Descrição do projeto
 
-O projeto por mais simples que pareça me fez sair da minha zona de conforto, pois meus conhecimentos técnicos estão mais focado na plataforma .Net, fiz questão de me desafiar a criar o projeto utilizando as ferramentas definidas no escopo do teste.
+O projeto por mais simples que pareça me fez sair da minha zona de conforto, pois meus conhecimentos técnicos estão mais focado na plataforma .Net c# utilizando bootstrap, css, javascript, fiz questão de me desafiar a criar o projeto utilizando as ferramentas definidas no escopo do teste.
 
 ## Descrição do projeto
 
