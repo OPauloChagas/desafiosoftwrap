@@ -24,8 +24,8 @@ As seguintes ferramentas foram usadas na construção do projeto:
 ### Features
 
 - [x] Inserir registros na tabela
-- [x] Editar regsitros na tabela
-- [x] Remover registros na tabela
+- [ ] Editar regsitros na tabela
+- [ ] Remover registros na tabela
 - [x] Paginar a tabela
 
 

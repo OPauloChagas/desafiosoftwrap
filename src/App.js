@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import 'antd/dist/antd.css';
 import './App.css';
-import { Button, Table, Modal, Input, InputNumber } from 'antd';
+import { Button, Table, Modal, Input } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { db } from './firebase-config';
-import { collection, getDocs, addDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, updateDoc, doc } from 'firebase/firestore';
 
 function App() {
 
@@ -18,6 +18,8 @@ function App() {
   const [isEditing, setIsEditing] = useState(false);
   const [editingCadastro, setEditingCadastro] = useState(null);
 
+  const [isNewCadastro, setIsNewCadastro] = useState(false);
+
   const [users, setUsers] = useState([]);
   const collecaoUsuariosRef = collection(db, "DadosUsuario");
 
@@ -25,14 +27,14 @@ function App() {
     await addDoc(collecaoUsuariosRef, { Nome: nwNome, Idade: nwIdade, EstadoCivil: nwEstadoCivil, CPF: nwCPF, Cidade: nwCidade, Estado: nwEstado });
   };
 
-  // const updateUser = async (id, nome, idade, estadocivil, cpf, cidade, estado) => {
-  //   const userDoc = doc(db, "DadosUsuario", id);
-  //   const newFields = { Nome: nome, Idade: idade, EstadoCivil: estadocivil, CPF: cpf, Cidade: cidade, Estado: estado }
-  //   await updateDoc(userDoc, newFields)
+  const updateCadastro = async (id, nome, idade, estadocivil, cpf, cidade, estado) => {
+    const userDoc = doc(db, "DadosUsuario", id);
+    const newFields = { nome: nome, Idade: idade, EstadoCivil: estadocivil, CPF: cpf, Cidade: cidade, Estado: estado }
+    await updateDoc(userDoc, newFields)
 
-  // };
+  };
 
-  // const [dataSource, setDataSource] = useState([]);
+  // const [dataSource, setDataSource] = useState([]);  
   // const fetchUsers = async () => {
   //   const response = db.collection('DadosUsuario');
   //   const data = await response.get();
@@ -44,6 +46,7 @@ function App() {
   // useEffect(() => {
   //   fetchUsers();
   // }, [])
+
 
   useEffect(() => {
     const getUsers = async () => {
@@ -58,42 +61,48 @@ function App() {
   const columns = [
     {
       key: '1',
+      title: 'Id',
+      dataIndex: 'id'
+    },
+    {
+      key: '2',
       title: 'Nome',
       dataIndex: 'Nome'
     },
     {
-      key: '2',
+      key: '3',
       title: 'Idade',
       dataIndex: 'Idade'
     },
     {
-      key: '3',
+      key: '4',
       title: 'Estado Civil',
       dataIndex: 'EstadoCivil'
     },
     {
-      key: '4',
+      key: '5',
       title: 'CPF',
       dataIndex: 'CPF'
     },
     {
-      key: '5',
+      key: '6',
       title: 'Cidade',
       dataIndex: 'Cidade'
     },
     {
-      key: '6',
+      key: '7',
       title: 'Estado',
       dataIndex: 'Estado'
     },
     {
-      key: '7',
+      key: '8',
       title: 'Actions',
       render: (record) => {
         return (
           <>
             <EditOutlined onClick={() => {
               onEditCadastro(record);
+
             }} />
 
             <DeleteOutlined onClick={() => {
@@ -112,82 +121,147 @@ function App() {
       okType: 'danger',
       onOk: () => {
         setUsers((pre) => {
-          return pre.filter((users) => users.Nome !== record.Nome);
+          return pre.filter((users) => users.id !== record.id);
         });
       },
     });
   };
 
   const onEditCadastro = (record) => {
+
     setIsEditing(true);
     setEditingCadastro({ ...record })
 
   };
+  const onNewCadastro = () => {
+    setIsNewCadastro(true);
+  }
+  const resetEditing = () => {
+    setIsEditing(false);
+    setEditingCadastro(null);
+
+  }
   return (
-
     <div className="App">
-      <header className="App-header">
+      <p></p>
+      <p></p>
+      {/* <header className="App-header"> */}
+      <Button type="primary" size="large" onClick={onNewCadastro}>Cadastrar novos dados</Button>
+      <p></p>
+      <Table
+        columns={columns}
+        dataSource={users}
+      ></Table>
+      <Modal
+        title="Editar Cadastro"
+        visible={isEditing}
+        onText="Save"
+        onCancel={() => {
+          resetEditing();
+        }}
+        onOk={() => {
 
-        {/* <input
+          editingCadastro(pre => {
+            return pre.map(user => {
+              if (user.id === editingCadastro.id) {
+                return editingCadastro
+              } else {
+                return user
+              }
+            })
+          })
+
+
+
+          users(pre => {
+            updateCadastro(pre.id, pre.Nome, pre.Idade, pre.EstadoCivil, pre.CPF, pre.Cidade, pre.Estado);
+          })
+          resetEditing();
+
+        }}
+      >
+
+        <Input value={editingCadastro?.Nome} onChange={(e) => {
+          setEditingCadastro(pre => {
+            return { ...pre, Nome: e.target.Nome }
+          })
+        }} />
+        <Input value={editingCadastro?.Idade} onChange={(e) => {
+          setEditingCadastro(pre => {
+            return { ...pre, Idade: e.target.Idade }
+          })
+        }} />
+        <Input value={editingCadastro?.EstadoCivil} onChange={(e) => {
+          setEditingCadastro(pre => {
+            return { ...pre, EstadoCivil: e.target.EstadoCivil }
+          })
+        }} />
+        <Input value={editingCadastro?.CPF} onChange={(e) => {
+          setEditingCadastro(pre => {
+            return { ...pre, CPF: e.target.CPF }
+          })
+        }} />
+        <Input value={editingCadastro?.Cidade} onChange={(e) => {
+          setEditingCadastro(pre => {
+            return { ...pre, Cidade: e.target.Cidade }
+          })
+        }} />
+        <Input value={editingCadastro?.Estado} onChange={(e) => {
+          setEditingCadastro(pre => {
+            return { ...pre, Estado: e.target.Estado }
+          })
+        }} />
+      </Modal>
+
+      <Modal
+        title="Novo Cadastro"
+        visible={isNewCadastro}
+        onText="Save"
+        onCancel={() => {
+          setIsNewCadastro(false);
+
+        }}
+        onOk={() => {
+          createUser();
+        }}
+      >
+        <Input
           placeholder="Nome"
           onChange={(event) => {
             setNwNome(event.target.value);
           }} />
-        <input type="number"
+        <Input
           placeholder="Idade"
           onChange={(event) => {
             setNwIdade(event.target.value)
           }} />
-
-        <input
+        <Input
           placeholder="Estado Civil"
           onChange={(event) => {
             setNwEstadoCivil(event.target.value)
           }} />
-
-        <input
+        <Input
           placeholder="CPF"
           onChange={(event) => {
             setNwCPF(event.target.value)
           }} />
-
-        <input
+        <Input
           placeholder="Cidade"
           onChange={(event) => {
             setNwCidade(event.target.value)
           }} />
-
-        <input
+        <Input
           placeholder="Estado"
           onChange={(event) => {
             setNwEstado(event.target.value)
           }} />
-        <button onClick={createUser}>Cadastrar Dados</button> */}
-        <Table
-          columns={columns}
-          dataSource={users}
-        ></Table>
-        <Modal
-          title="Editar Cadastro"
-          visible={isEditing}
-          onText="Save"
-          onCancel={() => {
-            setIsEditing(false);
-          }}
-          onOk={() => {
-            setIsEditing(false);
-          }}
-        >
-          <Input value={editingCadastro?.Nome} />
-          <InputNumber value={editingCadastro?.Idade} />
-          <Input value={editingCadastro?.EstadoCivil} />
-          <Input value={editingCadastro?.CPF} />
-          <Input value={editingCadastro?.Cidade} />
-          <Input value={editingCadastro?.Estado} />
-        </Modal>
-      </header>
+        <p></p>
 
+      </Modal>
+      {/* 
+      // </header>    */}
     </div>
+
   );
 
   // return (
