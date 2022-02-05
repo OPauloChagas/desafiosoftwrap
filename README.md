@@ -8,7 +8,20 @@ O projeto por mais simples que pareça me fez sair da minha zona de conforto, po
 
 ## Descrição do projeto
 
-...
+O projeto está dividido em três camadas dentro da pasta containers o Header, Modal e User Table separando as responsabilidades.
+
+.
+
+Optei por este partner pela familiaridade com a documentação, pois como comentado eu demorei mais tempo para entregar o projeto pois tive de recorrer a algumas pesquisas para conseguir desenvolver.
+
+.
+
+O Ant também foi utilizado como extenção para o style, além da tabela toda interação das requisições foram implementadas nele. 
+
+.
+
+O firebase foi bem tranquilo a documentação ajudou bastante para criar os métodos de insert, update e delete. 
+
 
 
 ### 🛠 Tecnologias
@@ -20,14 +33,12 @@ As seguintes ferramentas foram usadas na construção do projeto:
 - [Ant Design](https://ant.design/)
 
 
-
 ### Features
 
 - [x] Inserir registros na tabela
-- [ ] Editar regsitros na tabela
-- [ ] Remover registros na tabela
+- [x] Editar regsitros na tabela
+- [x] Remover registros na tabela
 - [x] Paginar a tabela
-
 
 
 <h1 align="center">Teste habilidade de Gestão</h1>
